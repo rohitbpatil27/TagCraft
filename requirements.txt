@@ -1,0 +1,3 @@
+# TagCraft requires only Python 3.10+ standard libraries (tkinter, ctypes, csv, json).
+# Optional package for enhanced Windows spooler enumeration:
+pywin32>=306
