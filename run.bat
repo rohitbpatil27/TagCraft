@@ -1,5 +1,5 @@
 @echo off
-title TagCraft - Thermal Barcode Printer
+title TagCraft - Barcode Studio
 cd /d "%~dp0"
-start pythonw app.py
+start "" "C:\Python313\pythonw.exe" app.py
 exit

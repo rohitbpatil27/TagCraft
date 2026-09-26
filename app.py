@@ -464,6 +464,18 @@ class TagCraftApp:
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = TagCraftApp(root)
-    root.mainloop()
+    try:
+        root = tk.Tk()
+        app = TagCraftApp(root)
+        root.mainloop()
+    except Exception as e:
+        import traceback
+        err_msg = traceback.format_exc()
+        log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "crash_debug.log")
+        with open(log_path, "w", encoding="utf-8") as f:
+            f.write(err_msg)
+        try:
+            from tkinter import messagebox
+            messagebox.showerror("TagCraft Error", f"TagCraft encountered an error:\n\n{e}\n\nDetails saved to crash_debug.log")
+        except Exception:
+            pass
