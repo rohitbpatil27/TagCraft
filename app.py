@@ -129,7 +129,7 @@ class TagCraftApp:
         self.search_var.trace_add("write", lambda *_: self.apply_filter())
 
         # 4. Middle Content: Table + Live Tag Preview Canvas
-        middle_paned = tk.PanedWindow(self.root, orient=tk.HORIZONTAL)
+        middle_paned = ttk.PanedWindow(self.root, orient=tk.HORIZONTAL)
         middle_paned.pack(fill=tk.BOTH, expand=True, padx=14, pady=4)
 
         # Table Frame
