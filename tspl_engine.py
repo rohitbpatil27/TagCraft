@@ -58,21 +58,25 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
         contact_x = x_base + max(10, ((400 - (len(contact) * 14)) // 2) - 10)
         lines.append(f'TEXT {contact_x},44,"2",0,1,1,"{contact}"')
 
-        # 3. Item Description (Padded at x_base + 25)
-        lines.append(f'TEXT {x_base + 25},74,"2",0,1,1,"{name}"')
+        # 3. Item Description (Centered)
+        name_x = x_base + max(10, (400 - (len(name) * 12)) // 2)
+        lines.append(f'TEXT {name_x},74,"2",0,1,1,"{name}"')
 
-        # 4. Size (Prominent, no rate/MRP) & Barcode
+        # 4. Size (Center Aligned, Prominent Font 3) & Barcode
         if size_text:
-            lines.append(f'TEXT {x_base + 25},106,"3",0,1,1,"{size_text}"')
+            size_x = x_base + max(10, (400 - (len(size_text) * 16)) // 2)
+            lines.append(f'TEXT {size_x},106,"3",0,1,1,"{size_text}"')
             lines.append(f'BARCODE {x_base + 25},144,"128",80,2,0,2,2,"{barcode}"')
         else:
             lines.append(f'BARCODE {x_base + 25},120,"128",90,2,0,2,2,"{barcode}"')
     else:
         # Standard layout without contact
         lines.append(f'TEXT {store_x},20,"3",0,1,1,"{store}"')
-        lines.append(f'TEXT {x_base + 25},58,"2",0,1,1,"{name}"')
+        name_x = x_base + max(10, (400 - (len(name) * 12)) // 2)
+        lines.append(f'TEXT {name_x},58,"2",0,1,1,"{name}"')
         if size_text:
-            lines.append(f'TEXT {x_base + 25},95,"3",0,1,1,"{size_text}"')
+            size_x = x_base + max(10, (400 - (len(size_text) * 16)) // 2)
+            lines.append(f'TEXT {size_x},95,"3",0,1,1,"{size_text}"')
             lines.append(f'BARCODE {x_base + 25},135,"128",85,2,0,2,2,"{barcode}"')
         else:
             lines.append(f'BARCODE {x_base + 25},110,"128",95,2,0,2,2,"{barcode}"')
