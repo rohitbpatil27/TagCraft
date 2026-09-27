@@ -29,7 +29,7 @@ def format_price_display(price: str) -> str:
 
 
 def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name: str = "MY STORE", 
-                              contact_info: str = "Vijayapura  Ph: 98803 33885",
+                              contact_info: str = "Vijayapura Ph:9880333885",
                               label_height_dots: int = 304):
     """
     Renders one sticker into TSPL commands at horizontal base offset x_base.
@@ -50,10 +50,11 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
     store_x = x_base + max(10, (400 - (len(store) * 16)) // 2)
 
     if contact:
-        contact_x = x_base + max(10, (400 - (len(contact) * 12)) // 2)
+        # Centered then shifted 1 space left (~14 dots) as requested
+        contact_x = x_base + max(10, ((400 - (len(contact) * 12)) // 2) - 14)
         # 1. Header (Centered)
         lines.append(f'TEXT {store_x},14,"3",0,1,1,"{store}"')
-        # 2. Contact / City & Phone Sub-header (Centered)
+        # 2. Contact / City & Phone Sub-header
         lines.append(f'TEXT {contact_x},44,"2",0,1,1,"{contact}"')
         # 3. Item Description (Padded at x_base + 25)
         lines.append(f'TEXT {x_base + 25},74,"2",0,1,1,"{name}"')
@@ -70,7 +71,7 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
 
 
 def generate_tspl_job(items_to_print: list[dict], store_name: str, 
-                      contact_info: str = "Vijayapura  Ph: 98803 33885", 
+                      contact_info: str = "Vijayapura Ph:9880333885", 
                       layout: str = "2-UP") -> str:
     """
     Generates a complete TSPL batch print job.

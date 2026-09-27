@@ -83,7 +83,7 @@ class TagCraftApp:
         self.store_name_var.trace_add("write", lambda *_: self.on_store_name_changed())
 
         tk.Label(store_frame, text="Contact:", font=("Segoe UI", 9, "bold"), fg="#e2e8f0", bg="#0f172a").pack(side=tk.LEFT, padx=(10, 2))
-        self.contact_info_var = tk.StringVar(value=self.config.get("contact_info", "Vijayapura  Ph: 98803 33885"))
+        self.contact_info_var = tk.StringVar(value=self.config.get("contact_info", "Vijayapura Ph:9880333885"))
         self.contact_entry = tk.Entry(store_frame, textvariable=self.contact_info_var, font=("Segoe UI", 9), 
                                       width=24, bg="#1e293b", fg="#f8fafc", insertbackground="white", relief=tk.FLAT)
         self.contact_entry.pack(side=tk.LEFT, padx=3, ipady=3)
@@ -352,8 +352,8 @@ class TagCraftApp:
         if contact:
             # 1. Store Header
             self.preview_canvas.create_text(120, 22, text=store, font=("Segoe UI", 10, "bold"), fill="#0f172a")
-            # 2. Contact Sub-header
-            self.preview_canvas.create_text(120, 38, text=contact, font=("Segoe UI", 7, "bold"), fill="#0369a1")
+            # 2. Contact Sub-header (Shifted slightly left)
+            self.preview_canvas.create_text(116, 38, text=contact, font=("Segoe UI", 7, "bold"), fill="#0369a1")
             # 3. Item Name
             self.preview_canvas.create_text(120, 56, text=name, font=("Segoe UI", 8), fill="#334155")
             # 4. Size & Price
