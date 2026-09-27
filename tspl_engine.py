@@ -29,7 +29,8 @@ def format_price_display(price: str) -> str:
 
 
 def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name: str = "MY STORE", 
-                               label_height_dots: int = 304):
+                              contact_info: str = "Vijayapura  Ph: 98803 33885",
+                              label_height_dots: int = 304):
     """
     Renders one sticker into TSPL commands at horizontal base offset x_base.
     Single sticker dimensions: 50mm (400 dots) width x 38mm (304 dots) height.
@@ -38,6 +39,7 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
         return
 
     store = (store_name or "MY STORE").strip()
+    contact = (contact_info or "").strip()
     name = clean_label_text(item.get("name", ""), max_chars=25)
     size = str(item.get("size", "")).strip()
     price = format_price_display(str(item.get("price", "")))
@@ -45,17 +47,31 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
 
     mrp_text = f"Size: {size}   MRP: {price}" if size else f"MRP: {price}"
 
-    # 1. Header (Centered at x_base + 88, Y = 20)
-    lines.append(f'TEXT {x_base + 88},20,"3",0,1,1,"{store}"')
-    # 2. Item Description (Padded at x_base + 25, Y = 58)
-    lines.append(f'TEXT {x_base + 25},58,"2",0,1,1,"{name}"')
-    # 3. Size & Price (Padded at x_base + 25, Y = 95)
-    lines.append(f'TEXT {x_base + 25},95,"2",0,1,1,"{mrp_text}"')
-    # 4. Barcode (Starts at x_base + 25, Y = 138, height=75 dots, human-readable=2 for CENTER)
-    lines.append(f'BARCODE {x_base + 25},138,"128",75,2,0,2,2,"{barcode}"')
+    store_x = x_base + max(10, (400 - (len(store) * 16)) // 2)
+
+    if contact:
+        contact_x = x_base + max(10, (400 - (len(contact) * 12)) // 2)
+        # 1. Header (Centered)
+        lines.append(f'TEXT {store_x},14,"3",0,1,1,"{store}"')
+        # 2. Contact / City & Phone Sub-header (Centered)
+        lines.append(f'TEXT {contact_x},44,"2",0,1,1,"{contact}"')
+        # 3. Item Description (Padded at x_base + 25)
+        lines.append(f'TEXT {x_base + 25},74,"2",0,1,1,"{name}"')
+        # 4. Size & Price (Padded at x_base + 25)
+        lines.append(f'TEXT {x_base + 25},106,"2",0,1,1,"{mrp_text}"')
+        # 5. Barcode (Starts at x_base + 25, height=70 dots, human-readable=2 for CENTER)
+        lines.append(f'BARCODE {x_base + 25},144,"128",70,2,0,2,2,"{barcode}"')
+    else:
+        # Standard layout without contact
+        lines.append(f'TEXT {store_x},20,"3",0,1,1,"{store}"')
+        lines.append(f'TEXT {x_base + 25},58,"2",0,1,1,"{name}"')
+        lines.append(f'TEXT {x_base + 25},95,"2",0,1,1,"{mrp_text}"')
+        lines.append(f'BARCODE {x_base + 25},138,"128",75,2,0,2,2,"{barcode}"')
 
 
-def generate_tspl_job(items_to_print: list[dict], store_name: str, layout: str = "2-UP") -> str:
+def generate_tspl_job(items_to_print: list[dict], store_name: str, 
+                      contact_info: str = "Vijayapura  Ph: 98803 33885", 
+                      layout: str = "2-UP") -> str:
     """
     Generates a complete TSPL batch print job.
     layout:
@@ -78,8 +94,8 @@ def generate_tspl_job(items_to_print: list[dict], store_name: str, layout: str =
             lines.append("DIRECTION 1")
             lines.append("REFERENCE 0,0")
             lines.append("CLS")
-            render_single_sticker_tspl(lines, left, x_base=0, store_name=store_name, label_height_dots=304)
-            render_single_sticker_tspl(lines, right, x_base=425, store_name=store_name, label_height_dots=304)
+            render_single_sticker_tspl(lines, left, x_base=0, store_name=store_name, contact_info=contact_info, label_height_dots=304)
+            render_single_sticker_tspl(lines, right, x_base=425, store_name=store_name, contact_info=contact_info, label_height_dots=304)
             lines.append("PRINT 1,1")
             lines.append("")
     else: # 1-UP Single Label
@@ -92,7 +108,7 @@ def generate_tspl_job(items_to_print: list[dict], store_name: str, layout: str =
             lines.append("DIRECTION 1")
             lines.append("REFERENCE 0,0")
             lines.append("CLS")
-            render_single_sticker_tspl(lines, item, x_base=0, store_name=store_name, label_height_dots=304)
+            render_single_sticker_tspl(lines, item, x_base=0, store_name=store_name, contact_info=contact_info, label_height_dots=304)
             lines.append("PRINT 1,1")
             lines.append("")
 

@@ -75,12 +75,19 @@ class TagCraftApp:
         store_frame = tk.Frame(header, bg="#0f172a")
         store_frame.pack(side=tk.RIGHT, padx=16, pady=8)
 
-        tk.Label(store_frame, text="Store Name:", font=("Segoe UI", 9, "bold"), fg="#e2e8f0", bg="#0f172a").pack(side=tk.LEFT, padx=4)
-        self.store_name_var = tk.StringVar(value=self.config.get("store_name", "MY STORE"))
-        self.store_entry = tk.Entry(store_frame, textvariable=self.store_name_var, font=("Segoe UI", 10, "bold"), 
-                                    width=20, bg="#1e293b", fg="#f8fafc", insertbackground="white", relief=tk.FLAT)
-        self.store_entry.pack(side=tk.LEFT, padx=4, ipady=3)
+        tk.Label(store_frame, text="Store:", font=("Segoe UI", 9, "bold"), fg="#e2e8f0", bg="#0f172a").pack(side=tk.LEFT, padx=(4, 2))
+        self.store_name_var = tk.StringVar(value=self.config.get("store_name", "KAPIL UNIFORMS"))
+        self.store_entry = tk.Entry(store_frame, textvariable=self.store_name_var, font=("Segoe UI", 9, "bold"), 
+                                    width=16, bg="#1e293b", fg="#f8fafc", insertbackground="white", relief=tk.FLAT)
+        self.store_entry.pack(side=tk.LEFT, padx=3, ipady=3)
         self.store_name_var.trace_add("write", lambda *_: self.on_store_name_changed())
+
+        tk.Label(store_frame, text="Contact:", font=("Segoe UI", 9, "bold"), fg="#e2e8f0", bg="#0f172a").pack(side=tk.LEFT, padx=(10, 2))
+        self.contact_info_var = tk.StringVar(value=self.config.get("contact_info", "Vijayapura  Ph: 98803 33885"))
+        self.contact_entry = tk.Entry(store_frame, textvariable=self.contact_info_var, font=("Segoe UI", 9), 
+                                      width=24, bg="#1e293b", fg="#f8fafc", insertbackground="white", relief=tk.FLAT)
+        self.contact_entry.pack(side=tk.LEFT, padx=3, ipady=3)
+        self.contact_info_var.trace_add("write", lambda *_: self.on_contact_info_changed())
 
         # 2. Main Control Bar (File Loader, Printer, Layout)
         control_card = tk.LabelFrame(self.root, text=" Device & Source Configuration ", font=("Segoe UI", 9, "bold"), padx=10, pady=8)
@@ -224,6 +231,11 @@ class TagCraftApp:
         save_config(self.config)
         self.update_live_preview()
 
+    def on_contact_info_changed(self):
+        self.config["contact_info"] = self.contact_info_var.get()
+        save_config(self.config)
+        self.update_live_preview()
+
     def on_layout_changed(self):
         self.config["layout"] = self.layout_var.get()
         save_config(self.config)
@@ -328,30 +340,51 @@ class TagCraftApp:
 
         vals = self.tree.item(selected[0], "values")
         store = self.store_name_var.get().strip() or "MY STORE"
+        contact = self.contact_info_var.get().strip()
         name = clean_label_text(vals[1], max_chars=25)
         size = vals[2]
         price = format_price_display(vals[3])
         barcode = vals[4]
 
         # Draw sticker border (simulating rounded 50mm x 38mm sticker)
-        self.preview_canvas.create_rectangle(10, 10, 230, 170, outline="#94a3b8", width=1, fill="#ffffff")
+        self.preview_canvas.create_rectangle(10, 8, 230, 172, outline="#94a3b8", width=1, fill="#ffffff")
         
-        # 1. Store Header
-        self.preview_canvas.create_text(120, 28, text=store, font=("Segoe UI", 11, "bold"), fill="#0f172a")
-        # 2. Item Name
-        self.preview_canvas.create_text(120, 52, text=name, font=("Segoe UI", 9), fill="#334155")
-        # 3. Size & Price
-        mrp_str = f"Size: {size}    MRP: {price}" if size else f"MRP: {price}"
-        self.preview_canvas.create_text(120, 76, text=mrp_str, font=("Segoe UI", 9, "bold"), fill="#0f172a")
+        if contact:
+            # 1. Store Header
+            self.preview_canvas.create_text(120, 22, text=store, font=("Segoe UI", 10, "bold"), fill="#0f172a")
+            # 2. Contact Sub-header
+            self.preview_canvas.create_text(120, 38, text=contact, font=("Segoe UI", 7, "bold"), fill="#0369a1")
+            # 3. Item Name
+            self.preview_canvas.create_text(120, 56, text=name, font=("Segoe UI", 8), fill="#334155")
+            # 4. Size & Price
+            mrp_str = f"Size: {size}    MRP: {price}" if size else f"MRP: {price}"
+            self.preview_canvas.create_text(120, 74, text=mrp_str, font=("Segoe UI", 8, "bold"), fill="#0f172a")
 
-        # 4. Barcode Stripes Mockup
-        start_x = 35
-        for i in range(32):
-            w = 2 if (i % 3 == 0 or i % 7 == 0) else 1
-            self.preview_canvas.create_line(start_x + i * 5, 95, start_x + i * 5, 140, width=w, fill="#000000")
-        
-        # 5. Barcode Text (Centered below stripes)
-        self.preview_canvas.create_text(120, 152, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
+            # 5. Barcode Stripes Mockup
+            start_x = 35
+            for i in range(32):
+                w = 2 if (i % 3 == 0 or i % 7 == 0) else 1
+                self.preview_canvas.create_line(start_x + i * 5, 92, start_x + i * 5, 138, width=w, fill="#000000")
+            
+            # 6. Barcode Text (Centered below stripes)
+            self.preview_canvas.create_text(120, 150, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
+        else:
+            # 1. Store Header
+            self.preview_canvas.create_text(120, 28, text=store, font=("Segoe UI", 11, "bold"), fill="#0f172a")
+            # 2. Item Name
+            self.preview_canvas.create_text(120, 52, text=name, font=("Segoe UI", 9), fill="#334155")
+            # 3. Size & Price
+            mrp_str = f"Size: {size}    MRP: {price}" if size else f"MRP: {price}"
+            self.preview_canvas.create_text(120, 76, text=mrp_str, font=("Segoe UI", 9, "bold"), fill="#0f172a")
+
+            # 4. Barcode Stripes Mockup
+            start_x = 35
+            for i in range(32):
+                w = 2 if (i % 3 == 0 or i % 7 == 0) else 1
+                self.preview_canvas.create_line(start_x + i * 5, 95, start_x + i * 5, 140, width=w, fill="#000000")
+            
+            # 5. Barcode Text (Centered below stripes)
+            self.preview_canvas.create_text(120, 152, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
 
     def select_all(self):
         self.tree.selection_set(self.tree.get_children())
@@ -406,6 +439,7 @@ class TagCraftApp:
             "barcode": vals[4]
         }
         store = self.store_name_var.get().strip() or "MY STORE"
+        contact = self.contact_info_var.get().strip()
         printer = self.printer_var.get()
         if not printer:
             messagebox.showerror("No Printer", "Please select a target printer.")
@@ -414,7 +448,7 @@ class TagCraftApp:
         layout = "2-UP" if "2-UP" in self.layout_var.get() else "1-UP"
         items_payload = [item, item] if layout == "2-UP" else [item]
 
-        tspl = generate_tspl_job(items_payload, store_name=store, layout=layout)
+        tspl = generate_tspl_job(items_payload, store_name=store, contact_info=contact, layout=layout)
         ok, msg = send_raw_tspl(printer, tspl, job_name="TagCraft_Test")
         if ok:
             messagebox.showinfo("Test Print Sent", f"Test print successfully sent to:\n{printer}")
@@ -454,8 +488,9 @@ class TagCraftApp:
             return
 
         store = self.store_name_var.get().strip() or "MY STORE"
+        contact = self.contact_info_var.get().strip()
         printer = self.printer_var.get()
-        tspl = generate_tspl_job(queue, store_name=store, layout=layout)
+        tspl = generate_tspl_job(queue, store_name=store, contact_info=contact, layout=layout)
         ok, msg = send_raw_tspl(printer, tspl, job_name="TagCraft_Batch")
         if ok:
             messagebox.showinfo("Batch Complete", f"Successfully sent {total_stickers} tags to {printer}!")
