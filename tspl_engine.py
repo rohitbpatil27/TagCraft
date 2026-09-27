@@ -4,7 +4,7 @@ Generates clean, calibrated TSPL commands for 203 DPI thermal printers.
 Supports 1-UP (single roll), 2-UP (2 across), and customizable dimensions.
 """
 
-def clean_label_text(text: str, max_chars: int = 26) -> str:
+def clean_label_text(text: str, max_chars: int = 28) -> str:
     """Sanitizes item description for label printing."""
     s = (text or "").strip()
     # Remove repetitive size suffixes if size is displayed separately
@@ -16,7 +16,7 @@ def clean_label_text(text: str, max_chars: int = 26) -> str:
     if s.startswith("General - "):
         s = s[10:].strip()
     if len(s) > max_chars:
-        return s[:max_chars - 2] + ".."
+        return s[:max_chars - 3].rstrip(" (/,-") + "..."
     return s
 
 
@@ -40,7 +40,7 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
 
     store = (store_name or "MY STORE").strip()
     contact = (contact_info or "").strip()
-    name = clean_label_text(item.get("name", ""), max_chars=25)
+    name = clean_label_text(item.get("name", ""), max_chars=28)
     size = str(item.get("size", "")).strip()
     if size in ["-", "N/A", "None", "0"]:
         size = ""
@@ -58,8 +58,8 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
         contact_x = x_base + max(10, ((400 - (len(contact) * 14)) // 2) - 10)
         lines.append(f'TEXT {contact_x},62,"2",0,1,1,"{contact}"')
 
-        # 3. Item Description (Centered)
-        name_x = x_base + max(10, (400 - (len(name) * 12)) // 2)
+        # 3. Item Description (Aligned directly below Vijayapura)
+        name_x = contact_x
         lines.append(f'TEXT {name_x},92,"2",0,1,1,"{name}"')
 
         # 4. Size (Center Aligned, Prominent Font 3) & Barcode
@@ -72,7 +72,7 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
     else:
         # Standard layout without contact
         lines.append(f'TEXT {store_x},38,"3",0,1,1,"{store}"')
-        name_x = x_base + max(10, (400 - (len(name) * 12)) // 2)
+        name_x = x_base + 22
         lines.append(f'TEXT {name_x},76,"2",0,1,1,"{name}"')
         if size_text:
             size_x = x_base + max(10, (400 - (len(size_text) * 16)) // 2)

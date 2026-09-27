@@ -341,7 +341,7 @@ class TagCraftApp:
         vals = self.tree.item(selected[0], "values")
         store = self.store_name_var.get().strip() or "MY STORE"
         contact = self.contact_info_var.get().strip()
-        name = clean_label_text(vals[1], max_chars=25)
+        name = clean_label_text(vals[1], max_chars=28)
         size = vals[2]
         price = format_price_display(vals[3])
         barcode = vals[4]
@@ -352,10 +352,10 @@ class TagCraftApp:
         if contact:
             # 1. Store Header
             self.preview_canvas.create_text(120, 30, text=store, font=("Segoe UI", 10, "bold"), fill="#0f172a")
-            # 2. Contact Sub-header (Shifted slightly left)
-            self.preview_canvas.create_text(116, 46, text=contact, font=("Segoe UI", 7, "bold"), fill="#0369a1")
-            # 3. Item Name
-            self.preview_canvas.create_text(120, 64, text=name, font=("Segoe UI", 8), fill="#334155")
+            # 2. Contact Sub-header (Left-aligned)
+            self.preview_canvas.create_text(22, 46, text=contact, anchor="w", font=("Segoe UI", 7, "bold"), fill="#0369a1")
+            # 3. Item Name (Left-aligned directly below Vijayapura)
+            self.preview_canvas.create_text(22, 64, text=name, anchor="w", font=("Segoe UI", 8), fill="#334155")
             # 4. Size (Prominent, no rate/MRP)
             size_display = f"Size: {size}" if (size and size not in ["-", "N/A"]) else ""
             if size_display:
@@ -377,7 +377,7 @@ class TagCraftApp:
             # 1. Store Header
             self.preview_canvas.create_text(120, 36, text=store, font=("Segoe UI", 11, "bold"), fill="#0f172a")
             # 2. Item Name
-            self.preview_canvas.create_text(120, 60, text=name, font=("Segoe UI", 9), fill="#334155")
+            self.preview_canvas.create_text(22, 60, text=name, anchor="w", font=("Segoe UI", 9), fill="#334155")
             # 3. Size (No rate/MRP)
             size_display = f"Size: {size}" if (size and size not in ["-", "N/A"]) else ""
             if size_display:
