@@ -53,21 +53,9 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
         # 1. Header (Centered)
         lines.append(f'TEXT {store_x},14,"3",0,1,1,"{store}"')
         
-        # 2. Contact Sub-header (Reduced space distance between City and Phone by ~8 dots)
-        if " " in contact:
-            parts = contact.split(" ", 1)
-            city_part, phone_part = parts[0], parts[1]
-            city_w = len(city_part) * 12
-            phone_w = len(phone_part) * 12
-            tight_gap = 5  # Reduced pixel gap (5 dots / ~0.6mm instead of wide 14-dot monospaced space)
-            total_w = city_w + tight_gap + phone_w
-            base_contact_x = x_base + max(10, ((400 - total_w) // 2) - 14)
-            phone_x = base_contact_x + city_w + tight_gap
-            lines.append(f'TEXT {base_contact_x},44,"2",0,1,1,"{city_part}"')
-            lines.append(f'TEXT {phone_x},44,"2",0,1,1,"{phone_part}"')
-        else:
-            contact_x = x_base + max(10, ((400 - (len(contact) * 12)) // 2) - 14)
-            lines.append(f'TEXT {contact_x},44,"2",0,1,1,"{contact}"')
+        # 2. Contact Sub-header (Single string with space after Vijayapura - zero overlap)
+        contact_x = x_base + max(10, ((400 - (len(contact) * 14)) // 2) - 10)
+        lines.append(f'TEXT {contact_x},44,"2",0,1,1,"{contact}"')
 
         # 3. Item Description (Padded at x_base + 25)
         lines.append(f'TEXT {x_base + 25},74,"2",0,1,1,"{name}"')
