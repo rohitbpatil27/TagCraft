@@ -52,34 +52,34 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
 
     if contact:
         # 1. Header (Centered)
-        lines.append(f'TEXT {store_x},14,"3",0,1,1,"{store}"')
+        lines.append(f'TEXT {store_x},32,"3",0,1,1,"{store}"')
         
         # 2. Contact Sub-header (Single string with space after Vijayapura)
         contact_x = x_base + max(10, ((400 - (len(contact) * 14)) // 2) - 10)
-        lines.append(f'TEXT {contact_x},44,"2",0,1,1,"{contact}"')
+        lines.append(f'TEXT {contact_x},62,"2",0,1,1,"{contact}"')
 
         # 3. Item Description (Centered)
         name_x = x_base + max(10, (400 - (len(name) * 12)) // 2)
-        lines.append(f'TEXT {name_x},74,"2",0,1,1,"{name}"')
+        lines.append(f'TEXT {name_x},92,"2",0,1,1,"{name}"')
 
         # 4. Size (Center Aligned, Prominent Font 3) & Barcode
         if size_text:
             size_x = x_base + max(10, (400 - (len(size_text) * 16)) // 2)
-            lines.append(f'TEXT {size_x},106,"3",0,1,1,"{size_text}"')
-            lines.append(f'BARCODE {x_base + 25},144,"128",80,2,0,2,2,"{barcode}"')
+            lines.append(f'TEXT {size_x},124,"3",0,1,1,"{size_text}"')
+            lines.append(f'BARCODE {x_base + 25},162,"128",80,2,0,2,2,"{barcode}"')
         else:
-            lines.append(f'BARCODE {x_base + 25},120,"128",90,2,0,2,2,"{barcode}"')
+            lines.append(f'BARCODE {x_base + 25},138,"128",90,2,0,2,2,"{barcode}"')
     else:
         # Standard layout without contact
-        lines.append(f'TEXT {store_x},20,"3",0,1,1,"{store}"')
+        lines.append(f'TEXT {store_x},38,"3",0,1,1,"{store}"')
         name_x = x_base + max(10, (400 - (len(name) * 12)) // 2)
-        lines.append(f'TEXT {name_x},58,"2",0,1,1,"{name}"')
+        lines.append(f'TEXT {name_x},76,"2",0,1,1,"{name}"')
         if size_text:
             size_x = x_base + max(10, (400 - (len(size_text) * 16)) // 2)
-            lines.append(f'TEXT {size_x},95,"3",0,1,1,"{size_text}"')
-            lines.append(f'BARCODE {x_base + 25},135,"128",85,2,0,2,2,"{barcode}"')
+            lines.append(f'TEXT {size_x},113,"3",0,1,1,"{size_text}"')
+            lines.append(f'BARCODE {x_base + 25},153,"128",85,2,0,2,2,"{barcode}"')
         else:
-            lines.append(f'BARCODE {x_base + 25},110,"128",95,2,0,2,2,"{barcode}"')
+            lines.append(f'BARCODE {x_base + 25},128,"128",95,2,0,2,2,"{barcode}"')
 
 
 def generate_tspl_job(items_to_print: list[dict], store_name: str, 

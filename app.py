@@ -351,48 +351,48 @@ class TagCraftApp:
         
         if contact:
             # 1. Store Header
-            self.preview_canvas.create_text(120, 22, text=store, font=("Segoe UI", 10, "bold"), fill="#0f172a")
+            self.preview_canvas.create_text(120, 30, text=store, font=("Segoe UI", 10, "bold"), fill="#0f172a")
             # 2. Contact Sub-header (Shifted slightly left)
-            self.preview_canvas.create_text(116, 38, text=contact, font=("Segoe UI", 7, "bold"), fill="#0369a1")
+            self.preview_canvas.create_text(116, 46, text=contact, font=("Segoe UI", 7, "bold"), fill="#0369a1")
             # 3. Item Name
-            self.preview_canvas.create_text(120, 56, text=name, font=("Segoe UI", 8), fill="#334155")
+            self.preview_canvas.create_text(120, 64, text=name, font=("Segoe UI", 8), fill="#334155")
             # 4. Size (Prominent, no rate/MRP)
             size_display = f"Size: {size}" if (size and size not in ["-", "N/A"]) else ""
             if size_display:
-                self.preview_canvas.create_text(120, 74, text=size_display, font=("Segoe UI", 9, "bold"), fill="#0f172a")
+                self.preview_canvas.create_text(120, 82, text=size_display, font=("Segoe UI", 9, "bold"), fill="#0f172a")
                 # 5. Barcode Stripes Mockup
                 start_x = 35
                 for i in range(32):
                     w = 2 if (i % 3 == 0 or i % 7 == 0) else 1
-                    self.preview_canvas.create_line(start_x + i * 5, 92, start_x + i * 5, 140, width=w, fill="#000000")
+                    self.preview_canvas.create_line(start_x + i * 5, 100, start_x + i * 5, 146, width=w, fill="#000000")
                 # 6. Barcode Text (Centered below stripes)
-                self.preview_canvas.create_text(120, 152, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
+                self.preview_canvas.create_text(120, 157, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
             else:
                 start_x = 35
                 for i in range(32):
                     w = 2 if (i % 3 == 0 or i % 7 == 0) else 1
-                    self.preview_canvas.create_line(start_x + i * 5, 78, start_x + i * 5, 134, width=w, fill="#000000")
-                self.preview_canvas.create_text(120, 146, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
+                    self.preview_canvas.create_line(start_x + i * 5, 86, start_x + i * 5, 142, width=w, fill="#000000")
+                self.preview_canvas.create_text(120, 154, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
         else:
             # 1. Store Header
-            self.preview_canvas.create_text(120, 28, text=store, font=("Segoe UI", 11, "bold"), fill="#0f172a")
+            self.preview_canvas.create_text(120, 36, text=store, font=("Segoe UI", 11, "bold"), fill="#0f172a")
             # 2. Item Name
-            self.preview_canvas.create_text(120, 52, text=name, font=("Segoe UI", 9), fill="#334155")
+            self.preview_canvas.create_text(120, 60, text=name, font=("Segoe UI", 9), fill="#334155")
             # 3. Size (No rate/MRP)
             size_display = f"Size: {size}" if (size and size not in ["-", "N/A"]) else ""
             if size_display:
-                self.preview_canvas.create_text(120, 74, text=size_display, font=("Segoe UI", 10, "bold"), fill="#0f172a")
+                self.preview_canvas.create_text(120, 82, text=size_display, font=("Segoe UI", 10, "bold"), fill="#0f172a")
                 start_x = 35
                 for i in range(32):
                     w = 2 if (i % 3 == 0 or i % 7 == 0) else 1
-                    self.preview_canvas.create_line(start_x + i * 5, 94, start_x + i * 5, 142, width=w, fill="#000000")
-                self.preview_canvas.create_text(120, 153, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
+                    self.preview_canvas.create_line(start_x + i * 5, 102, start_x + i * 5, 148, width=w, fill="#000000")
+                self.preview_canvas.create_text(120, 158, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
             else:
                 start_x = 35
                 for i in range(32):
                     w = 2 if (i % 3 == 0 or i % 7 == 0) else 1
-                    self.preview_canvas.create_line(start_x + i * 5, 78, start_x + i * 5, 134, width=w, fill="#000000")
-                self.preview_canvas.create_text(120, 146, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
+                    self.preview_canvas.create_line(start_x + i * 5, 86, start_x + i * 5, 142, width=w, fill="#000000")
+                self.preview_canvas.create_text(120, 154, text=barcode, font=("Consolas", 8, "bold"), fill="#0f172a")
 
     def select_all(self):
         self.tree.selection_set(self.tree.get_children())
