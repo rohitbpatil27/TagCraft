@@ -42,10 +42,11 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
     contact = (contact_info or "").strip()
     name = clean_label_text(item.get("name", ""), max_chars=25)
     size = str(item.get("size", "")).strip()
-    price = format_price_display(str(item.get("price", "")))
+    if size in ["-", "N/A", "None", "0"]:
+        size = ""
     barcode = str(item.get("barcode", "")).strip()
 
-    mrp_text = f"Size: {size}   MRP: {price}" if size else f"MRP: {price}"
+    size_text = f"Size: {size}" if size else ""
 
     store_x = x_base + max(10, (400 - (len(store) * 16)) // 2)
 
@@ -53,22 +54,28 @@ def render_single_sticker_tspl(lines: list, item: dict, x_base: int, store_name:
         # 1. Header (Centered)
         lines.append(f'TEXT {store_x},14,"3",0,1,1,"{store}"')
         
-        # 2. Contact Sub-header (Single string with space after Vijayapura - zero overlap)
+        # 2. Contact Sub-header (Single string with space after Vijayapura)
         contact_x = x_base + max(10, ((400 - (len(contact) * 14)) // 2) - 10)
         lines.append(f'TEXT {contact_x},44,"2",0,1,1,"{contact}"')
 
         # 3. Item Description (Padded at x_base + 25)
         lines.append(f'TEXT {x_base + 25},74,"2",0,1,1,"{name}"')
-        # 4. Size & Price (Padded at x_base + 25)
-        lines.append(f'TEXT {x_base + 25},106,"2",0,1,1,"{mrp_text}"')
-        # 5. Barcode (Starts at x_base + 25, height=70 dots, human-readable=2 for CENTER)
-        lines.append(f'BARCODE {x_base + 25},144,"128",70,2,0,2,2,"{barcode}"')
+
+        # 4. Size (Prominent, no rate/MRP) & Barcode
+        if size_text:
+            lines.append(f'TEXT {x_base + 25},106,"3",0,1,1,"{size_text}"')
+            lines.append(f'BARCODE {x_base + 25},144,"128",80,2,0,2,2,"{barcode}"')
+        else:
+            lines.append(f'BARCODE {x_base + 25},120,"128",90,2,0,2,2,"{barcode}"')
     else:
         # Standard layout without contact
         lines.append(f'TEXT {store_x},20,"3",0,1,1,"{store}"')
         lines.append(f'TEXT {x_base + 25},58,"2",0,1,1,"{name}"')
-        lines.append(f'TEXT {x_base + 25},95,"2",0,1,1,"{mrp_text}"')
-        lines.append(f'BARCODE {x_base + 25},138,"128",75,2,0,2,2,"{barcode}"')
+        if size_text:
+            lines.append(f'TEXT {x_base + 25},95,"3",0,1,1,"{size_text}"')
+            lines.append(f'BARCODE {x_base + 25},135,"128",85,2,0,2,2,"{barcode}"')
+        else:
+            lines.append(f'BARCODE {x_base + 25},110,"128",95,2,0,2,2,"{barcode}"')
 
 
 def generate_tspl_job(items_to_print: list[dict], store_name: str, 
